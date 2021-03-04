@@ -5,6 +5,7 @@ import 'package:demo_kai_morning_210303/widgets/order_doing_list.dart';
 import 'package:demo_kai_morning_210303/widgets/order_done_list.dart';
 import 'package:demo_kai_morning_210303/widgets/order_ready_list.dart';
 import 'package:flutter/material.dart';
+import 'package:testaaaa/constant/size.dart';
 import '../constant/size.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
 
     if(size == null){
       size = MediaQuery.of(context).size;
+      print(size);
     }
 
     return Consumer<UserModelState>(
