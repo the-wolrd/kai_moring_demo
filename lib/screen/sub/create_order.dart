@@ -1,58 +1,37 @@
 import 'package:demo_kai_morning_210303/constant/firestore_keys.dart';
 import 'package:demo_kai_morning_210303/model/camera_state.dart';
+import 'package:demo_kai_morning_210303/model/store_model.dart';
+import 'package:demo_kai_morning_210303/model/user_model.dart';
 import 'package:demo_kai_morning_210303/network/order_network_func.dart';
-import 'package:demo_kai_morning_210303/useful/change_name.dart';
+import 'package:demo_kai_morning_210303/network/store_network_func.dart';
+import 'package:demo_kai_morning_210303/network/user_network_func.dart';
+import 'file:///C:/Users/asdf/Desktop/test/demo_kai_morning_210303/lib/screen/show_store_list.dart';
 import 'package:demo_kai_morning_210303/useful/generate_key.dart';
+import 'package:demo_kai_morning_210303/useful/search_engine.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../constant/size.dart';
 import '../../model/firebase_auth_state.dart';
+import 'dialog/create_order_day_dialog.dart';
+import 'dialog/create_order_menu_dialog.dart';
+import 'dialog/create_order_store_dialog.dart';
+import 'dialog/create_order_time_dialog.dart';
+import 'dialog/create_order_user_dialog.dart';
 
 class CreateOrderScreen extends StatefulWidget {
-
-
   @override
   _CreateOrderScreenState createState() => _CreateOrderScreenState();
 }
 
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-
-
-//  orderKey
-//  store
-//  menu
-//  time
-//  madeTime
-//  goal
-//  orderer // 선택할 수 있게?
-//  process
-
-  TextEditingController _storeController = TextEditingController();
-  TextEditingController _menuController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
-
-  // TextEditingController _goalController = TextEditingController();
-  // TextEditingController _ordererController = TextEditingController();
-  // TextEditingController _phoneController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _storeController.dispose();
-    _menuController.dispose();
-    _timeController.dispose();
-    // _goalController.dispose();
-    // _ordererController.dispose();
-    // _phoneController.dispose();
-    super.dispose();
-  }
+  DateTime _daySelect = DateTime.now();
+  String _timeSelect = '';
+  String _storeSelect = '';
+  String _menuSelect = '';
+  String _ordererSelect = '';
+  String _destSelect = '';
 
   @override
   Widget build(BuildContext context) {
@@ -61,166 +40,206 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
         resizeToAvoidBottomInset: true,
         body: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.directions_car,
-                      size: 50.0,
-                    ),
-                    Text(
-                      '신규 주문 등록',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Row(
-                  children: [
-                    Text('시간'),
-                    PopupMenuButton<int>(
-                      icon: Icon(Icons.assistant_photo),
-                      itemBuilder: (context) {
-                        return [
-                          PopupMenuItem(value: 0, child: Text('08:30 ~ 09:30')),
-                          PopupMenuItem(value: 1, child: Text('11:00 ~ 12:00')),
-                        ];
-                      },
-                      onSelected: (value) {
-                        setState(() {
-                          if (value == 0)
-                            _timeController.text = '08:30 ~ 09:30';
-                          else
-                            _timeController.text = '11:00 ~ 12:00';
+          child: ListView(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.directions_car,
+                    size: 50.0,
+                  ),
+                  Text(
+                    '신규 주문 등록',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text('날짜'),
+              SizedBox(
+                height: 5.0,
+              ),
+              InkWell(
+                  onTap: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return DaySelectDialog(selDay: (DateTime dateTime) {
+                          setState(() {
+                            _daySelect = dateTime;
+                          });
                         });
                       },
-                      onCanceled: () {
-                        setState(() {
-                          _timeController.text = '';
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                  controller: _timeController,
-                  decoration: textInputDecor('시간 선택'),
-                  cursorColor: Colors.black54,
-                  validator: (text) {
-                    if (text.isNotEmpty && text != '') {
-                      return null;
-                    } else {
-                      return '시간을 정해주세요.';
-                    }
+                    );
                   },
-                ),
-                Row(
-                  children: [
-                    Text('가게'),
-                    PopupMenuButton<String>(
-                      icon: Icon(Icons.assistant_photo),
-                      itemBuilder: (context) {
-                        return [
-                          PopupMenuItem(
-                              value: changeName(KEY_CAMTO), child: Text('캄토')),
-                          PopupMenuItem(
-                              value: changeName(KEY_HUE), child: Text('휴김밥')),
-                          PopupMenuItem(
-                            value: changeName(KEY_PULBITMARU),
-                            child: Text('풀빛마루'),
-                          )
-                        ];
-                      },
-                      onSelected: (value) {
-                        setState(() {
-                          _storeController.text = value;
+                  child: _showContainer(
+                      '${DateFormat('yyyy-MM-dd').format(_daySelect)}')),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text('시간'),
+              SizedBox(
+                height: 5.0,
+              ),
+              InkWell(
+                onTap: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return TimeSelectDialog(
+                        selTime: (String selectedTime) {
+                          setState(() {
+                            _timeSelect = selectedTime;
+                          });
+                        },
+                      );
+                    },
+                  );
+                },
+                child: _showContainer(_timeSelect),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text('가게'),
+              SizedBox(
+                height: 5.0,
+              ),
+              InkWell(
+                  onTap: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StoreSelectDialog(selItem: (String selItem) {
+                          setState(() {
+                            _storeSelect = selItem;
+                          });
                         });
                       },
-                      onCanceled: () {
-                        setState(() {
-                          _storeController.text = '';
-                        });
+                    );
+                  },
+                  child: _showContainer(_storeSelect)),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text('메뉴'),
+              SizedBox(
+                height: 5.0,
+              ),
+              InkWell(
+                  onTap: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return MenuSelectDialog(
+                          selMenu: (String selectedMenu) {
+                            setState(() {
+                              _menuSelect = selectedMenu;
+                            });
+                          },
+                        );
                       },
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                  controller: _storeController,
-                  decoration: textInputDecor('가게'),
-                  cursorColor: Colors.black54,
-                  validator: (text) {
-                    if (text.isNotEmpty && text != '') {
-                      return null;
-                    } else {
-                      return '가게가 비어있습니다.';
-                    }
+                    );
                   },
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text('메뉴'),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                  controller: _menuController,
-                  decoration: textInputDecor('메뉴'),
-                  cursorColor: Colors.black54,
-                  validator: (text) {
-                    if (text.isNotEmpty) {
-                      return null;
-                    } else {
-                      return '메뉴가 비어있습니다.';
-                    }
+                  child: _showContainer(_menuSelect)),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text('주문자 선택'),
+              SizedBox(
+                height: 5.0,
+              ),
+              InkWell(
+                  onTap: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return UserSelectDialog(
+                          selUser: (String selectedUser,
+                              {String defaultDest = ''}) {
+                            setState(() {
+                              _ordererSelect = selectedUser;
+                              _destSelect = defaultDest;
+                            });
+                          },
+                        );
+                      },
+                    );
                   },
-                ),
+                  child: _showContainer(_ordererSelect)),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text('수령지 선택'),
+              SizedBox(
+                height: 5.0,
+              ),
+              InkWell(
+                  onTap: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        TextEditingController _destController =
+                            TextEditingController();
 
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text('닉네임 선택'),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                  controller: _menuController,
-                  decoration: textInputDecor('메뉴'),
-                  cursorColor: Colors.black54,
-                  validator: (text) {
-                    if (text.isNotEmpty) {
-                      return null;
-                    } else {
-                      return '메뉴가 비어있습니다.';
-                    }
+                        return AlertDialog(
+                            title: Text('수령지 변경'),
+                            content: TextField(
+                              controller: _destController,
+                            ),
+                            actions: [
+                              FlatButton(
+                                child: Text(
+                                  '선택',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _destSelect = _destController.text;
+                                  Navigator.pop(context);
+                                  setState(() {});
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('취소',
+                                    style: TextStyle(color: Colors.black87)),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ]);
+                      },
+                    );
                   },
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text('수령지'),
-                SizedBox(
-                  height: 5.0,
-                ),
-
-                _submitButton(context),
-              ],
-            ),
+                  child: _showContainer(_destSelect)),
+              SizedBox(
+                height: 20.0,
+              ),
+              _submitButton(context),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Container _showContainer(String content) {
+    return Container(
+      height: 50.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        border: Border.all(width: 1.0, color: Colors.grey[300]),
+        color: Colors.grey[100],
+      ),
+      child: Center(
+          child: Text(
+        content,
+        style: TextStyle(color: Colors.black87),
+      )),
     );
   }
 
@@ -228,68 +247,32 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     return FlatButton(
       color: Colors.blue,
       onPressed: () async {
-        if (_formKey.currentState.validate()) {
-          print('Validation success!!');
-          showModalBottomSheet(
-              context: context,
-              builder: (_) {
-                return MyProgressIndicator();
-              },
-              isDismissible: false,
-              enableDrag: false);
+        showModalBottomSheet(
+            context: context,
+            builder: (_) {
+              return MyProgressIndicator();
+            },
+            isDismissible: false,
+            enableDrag: false);
 
-          await orderNetwork.createNewOrder(
-              orderKey: generateOrderKey(
-                  store: _storeController.text,),
-              store: _storeController.text,
-              menu: _menuController.text,
-              time: _timeController.text,
-              ordererKey: "2021-03-05 08:29:06.791370",
-              orderDay: DateTime.now(),
+        await orderNetwork.createNewOrder(
+            orderKey: generateOrderKey(store: _storeSelect),
+            store: _storeSelect,
+            menu: _menuSelect,
+            time: _timeSelect,
+            dest: _destSelect,
+            ordererKey: _ordererSelect,
+            orderDay: _daySelect);
 
-              // goal: _goalController.text,
-              // orderer: _ordererController.text,
-              // phone: _phoneController.text
-          );
+        Navigator.pop(context);
 
-          Navigator.pop(context);
-
-          Navigator.pop(context);
-        }
+        Navigator.pop(context);
       },
       child: Text(
         '신규 주문 추가',
         style: TextStyle(color: Colors.white),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-    );
-  }
-
-  InputDecoration textInputDecor(String hint) {
-    return InputDecoration(
-        hintText: hint,
-        enabledBorder: activeInputBorder(),
-        focusedBorder: activeInputBorder(),
-        errorBorder: errorInputBorder(),
-        focusedErrorBorder: errorInputBorder(),
-        filled: true,
-        fillColor: Colors.grey[100]);
-  }
-
-  OutlineInputBorder errorInputBorder() {
-    return OutlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.redAccent,
-        ),
-        borderRadius: BorderRadius.circular(12.0));
-  }
-
-  OutlineInputBorder activeInputBorder() {
-    return OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.grey[300],
-      ),
-      borderRadius: BorderRadius.circular(12.0),
     );
   }
 }

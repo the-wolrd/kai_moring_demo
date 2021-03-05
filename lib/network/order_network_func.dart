@@ -14,9 +14,7 @@ class OrderNetwork with Transformers {
     @required String store,
     @required String menu,
     @required String time,
-    // @required String goal,
-    // @required String orderer,
-    // @required String phone,
+    @required String dest,
     @required String ordererKey,
     @required DateTime orderDay,
   }) async {
@@ -30,9 +28,7 @@ class OrderNetwork with Transformers {
         store: store,
         menu: menu,
         time: time,
-        // goal: goal,
-        // orderer: orderer,
-        // phone: phone,
+        dest: dest,
         ordererKey: ordererKey,
         orderDay: orderDay,
       ));

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_kai_morning_210303/constant/firestore_keys.dart';
 import 'package:demo_kai_morning_210303/model/order_model.dart';
 import 'package:demo_kai_morning_210303/model/user_model.dart';
+import 'package:demo_kai_morning_210303/model/store_model.dart';
 import '../../model/rider_model.dart';
 
 
@@ -59,6 +60,7 @@ class Transformers {
 
     sink.add(orders);
   });
+
   final toUsers = StreamTransformer<QuerySnapshot, List<UserModel>>.fromHandlers(handleData: (snapshot, sink) async {
     List<UserModel> users = [];
 
@@ -67,6 +69,16 @@ class Transformers {
     });
 
     sink.add(users);
+  });
+
+  final toStores = StreamTransformer<QuerySnapshot, List<StoreModel>>.fromHandlers(handleData: (snapshot, sink) async {
+    List<StoreModel> stores = [];
+
+    snapshot.docs.forEach((documentSnapshot) {
+      stores.add(StoreModel.fromSnapshot(documentSnapshot));
+    });
+
+    sink.add(stores);
   });
 
 }

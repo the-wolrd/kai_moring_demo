@@ -40,6 +40,7 @@ dependencies:
   path_provider: ^1.6.27
   image_gallery_saver: ^1.6.8
   image_picker: ^0.6.7+22 # camera 기능이 되는 것 같음
+  intl: ^0.16.1 # 날짜, 시간관련  0.17.0 은 호환이 안되더라. low grade함
 
 dev_dependencies:
   flutter_test:

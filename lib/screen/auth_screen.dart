@@ -123,17 +123,6 @@ class _AuthScreenState extends State<AuthScreen> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RegisterUserPage()));
-                        },
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          color: Colors.brown,))
                   ],
                 ),
               ),
