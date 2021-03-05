@@ -33,9 +33,10 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController _storeController = TextEditingController();
   TextEditingController _menuController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
-  TextEditingController _goalController = TextEditingController();
-  TextEditingController _ordererController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
+
+  // TextEditingController _goalController = TextEditingController();
+  // TextEditingController _ordererController = TextEditingController();
+  // TextEditingController _phoneController = TextEditingController();
 
   @override
   void initState() {
@@ -47,9 +48,9 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     _storeController.dispose();
     _menuController.dispose();
     _timeController.dispose();
-    _goalController.dispose();
-    _ordererController.dispose();
-    _phoneController.dispose();
+    // _goalController.dispose();
+    // _ordererController.dispose();
+    // _phoneController.dispose();
     super.dispose();
   }
 
@@ -190,63 +191,30 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 SizedBox(
                   height: 10.0,
                 ),
+                Text('닉네임 선택'),
+                SizedBox(
+                  height: 5.0,
+                ),
+                TextFormField(
+                  controller: _menuController,
+                  decoration: textInputDecor('메뉴'),
+                  cursorColor: Colors.black54,
+                  validator: (text) {
+                    if (text.isNotEmpty) {
+                      return null;
+                    } else {
+                      return '메뉴가 비어있습니다.';
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Text('수령지'),
                 SizedBox(
                   height: 5.0,
                 ),
-                TextFormField(
-                  controller: _goalController,
-                  decoration: textInputDecor('수령지'),
-                  cursorColor: Colors.black54,
-                  validator: (text) {
-                    if (text.isNotEmpty) {
-                      return null;
-                    } else {
-                      return '수령지가 비어있습니다.';
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text('주문자'),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                  controller: _ordererController,
-                  decoration: textInputDecor('주문자'),
-                  cursorColor: Colors.black54,
-                  validator: (text) {
-                    if (text.isNotEmpty) {
-                      return null;
-                    } else {
-                      return '주문자가 비어있습니다.';
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text('폰번호'),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                  controller: _phoneController,
-                  decoration: textInputDecor('폰번호'),
-                  cursorColor: Colors.black54,
-                  validator: (text) {
-                    if (text.isNotEmpty && text.length > 8) {
-                      return null;
-                    } else {
-                      return '폰 번호를 입력해주세요';
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
+
                 _submitButton(context),
               ],
             ),
@@ -272,15 +240,16 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
           await orderNetwork.createNewOrder(
               orderKey: generateOrderKey(
-                  time: _timeController.text,
-                  store: _storeController.text,
-                  ordererName: _ordererController.text),
+                  store: _storeController.text,),
               store: _storeController.text,
               menu: _menuController.text,
               time: _timeController.text,
-              goal: _goalController.text,
-              orderer: _ordererController.text,
-              phone: _phoneController.text);
+              ordererKey: "2021-03-05 08:29:06.791370",
+
+              // goal: _goalController.text,
+              // orderer: _ordererController.text,
+              // phone: _phoneController.text
+          );
 
           Navigator.pop(context);
 

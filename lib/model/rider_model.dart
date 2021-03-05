@@ -21,13 +21,8 @@ class RiderModel{
   RiderModel.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
-  static Map<String, dynamic> getMapForCreateUser({
-  String userKey,
-    String userEmail,
-    String userName,
-    String userNickName,
-    String userPhone
-}){
+  static Map<String, dynamic> getMapForCreateRider({  String userKey,    String userEmail,    String userName,    String userNickName,    String userPhone}){
+
     Map<String, dynamic> map = Map();
     map[KEY_USERKEY] = userKey;
     map[KEY_USEREMAIL] = userEmail;

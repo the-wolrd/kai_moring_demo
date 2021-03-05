@@ -1,3 +1,3 @@
-String generateOrderKey({String time, String store, String ordererName,}){
-  return '${time}_${store}_${ordererName}';
+String generateOrderKey({String store}){
+  return '${DateTime.now().millisecondsSinceEpoch.toString()}_${store}';
 }

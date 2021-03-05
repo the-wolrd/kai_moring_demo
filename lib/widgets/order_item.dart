@@ -42,10 +42,11 @@ class _OrderItemState extends State<OrderItem> {
             Text('가게 : ${widget.orderModel.store}'),
             Text('메뉴 : ${widget.orderModel.menu}'),
             Text('시간 : ${widget.orderModel.time}'),
-            Text('수령장소 : ${widget.orderModel.goal}'),
-            Text('주문자 : ${widget.orderModel.orderer}'),
-            Text('폰번호 : ${widget.orderModel.phone}'),
+            // Text('수령장소 : ${widget.orderModel.goal}'),
+            // Text('주문자 : ${widget.orderModel.orderer}'),
+            // Text('폰번호 : ${widget.orderModel.phone}'),
             Text('주문시간 : ${widget.orderModel.madeTime}', style: TextStyle(color: Colors.grey, fontSize: 10.0),),
+            Text('주문시간 : ${widget.orderModel.ordererKey}'),
             SizedBox(height: 10.0,),
             Text('현재 상태'),
             SizedBox(height: 10.0,),
@@ -60,7 +61,7 @@ class _OrderItemState extends State<OrderItem> {
                       bool flag = await showDialog(context: context, builder: (context){
                         return AlertDialog(
                           title: Text('상태 변경'),
-                          content: Text('${widget.orderModel.store}\n${widget.orderModel.menu}\n${widget.orderModel.time}\n${widget.orderModel.orderer}\n\n정말 대기 상태로 돌리시겠습니까?'),
+                          content: Text('${widget.orderModel.store}\n${widget.orderModel.menu}\n${widget.orderModel.time}\n}\n\n정말 대기 상태로 돌리시겠습니까?'),
                           actions: [
                             FlatButton(
                               child: Text('변경'),
@@ -94,7 +95,7 @@ class _OrderItemState extends State<OrderItem> {
                       bool flag = await showDialog(context: context, builder: (context){
                         return AlertDialog(
                           title: Text('상태 변경'),
-                          content: Text('${widget.orderModel.store}\n${widget.orderModel.menu}\n${widget.orderModel.time}\n${widget.orderModel.orderer}\n\n진행중 상태로 변경하시겠습니까? \n (상품 수령 하신거죠?) \n (아니면 배송 오류?!)'),
+                          content: Text('${widget.orderModel.store}\n${widget.orderModel.menu}\n${widget.orderModel.time}\n}\n\n진행중 상태로 변경하시겠습니까? \n (상품 수령 하신거죠?) \n (아니면 배송 오류?!)'),
                           actions: [
                             FlatButton(
                               child: Text('변경'),

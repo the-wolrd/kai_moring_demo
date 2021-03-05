@@ -15,7 +15,7 @@ class RiderNetwork with Transformers {
     DocumentSnapshot snapshot = await userRef.get();
 
     if(!snapshot.exists){
-      return await userRef.set(RiderModel.getMapForCreateUser(userKey: userKey, userEmail: userEmail, userName: userName, userNickName: userNickName, userPhone: userPhone));
+      return await userRef.set(RiderModel.getMapForCreateRider(userKey: userKey, userEmail: userEmail, userName: userName, userNickName: userNickName, userPhone: userPhone));
     }
   }
 

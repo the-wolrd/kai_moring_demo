@@ -3,6 +3,7 @@ const COLLECTION_HOME = 'kai_morning';
 const DOCUMENT_ADMIN = 'admin';
 const COLLECTION_RIDERS = 'riders';
 const COLLECTION_ORDERS = 'orders';
+const COLLECTION_USERS = 'users';
 
 const DOCUMENT_ASSET = 'assets';
 const COLLECTION_GOALS = 'goals';
@@ -13,6 +14,7 @@ const KEY_USERNAME = 'userName';
 const KEY_USERPHONE = 'userPhone';
 const KEY_USERNICKNAME = 'userNickName';
 const KEY_USEREMAIL = 'userEmail';
+const KEY_USERDEST = 'userDestination';
 
 
 const KEY_ORDERKEY = 'orderKey';
@@ -24,6 +26,7 @@ const KEY_ORDERGOAL = 'goal';
 const KEY_ORDERER = 'orderer';
 const KEY_PHONENUMBER = 'phoneNumber';
 const KEY_PROCESS = 'process';
+const KEY_ORDERERKEY = 'ordererKey';
 
 const KEY_READY = 'ready';
 const KEY_DOING = 'doing';

@@ -14,9 +14,10 @@ class OrderNetwork with Transformers {
     @required String store,
     @required String menu,
     @required String time,
-    @required String goal,
-    @required String orderer,
-    @required String phone
+    // @required String goal,
+    // @required String orderer,
+    // @required String phone,
+    @required String ordererKey,
   }) async {
     final DocumentReference orderRef = FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ADMIN).collection(COLLECTION_ORDERS).doc(orderKey);
 
@@ -28,9 +29,10 @@ class OrderNetwork with Transformers {
         store: store,
         menu: menu,
         time: time,
-        goal: goal,
-        orderer: orderer,
-        phone: phone
+        // goal: goal,
+        // orderer: orderer,
+        // phone: phone,
+        ordererKey: ordererKey,
       ));
     }
   }
