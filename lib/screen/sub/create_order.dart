@@ -245,6 +245,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               menu: _menuController.text,
               time: _timeController.text,
               ordererKey: "2021-03-05 08:29:06.791370",
+              orderDay: DateTime.now(),
 
               // goal: _goalController.text,
               // orderer: _ordererController.text,

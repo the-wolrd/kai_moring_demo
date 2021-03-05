@@ -1,4 +1,5 @@
 import 'package:demo_kai_morning_210303/screen/sub/create_order.dart';
+import 'package:demo_kai_morning_210303/screen/sub/register_user.dart';
 import 'package:demo_kai_morning_210303/widgets/body_tab.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
 import 'package:demo_kai_morning_210303/widgets/order_doing_list.dart';
@@ -17,26 +18,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   int selectedTap = 0;
 
   @override
   Widget build(BuildContext context) {
-
-
-    if(size == null){
+    if (size == null) {
       size = MediaQuery.of(context).size;
       print(size);
     }
 
     return Consumer<UserModelState>(
-      builder: (context, userModelState, _){
-        if(userModelState == null){
+      builder: (context, userModelState, _) {
+        if (userModelState == null) {
           return MyProgressIndicator();
-        }
-        else if(userModelState.userModel == null){
+        } else if (userModelState.userModel == null) {
           return SafeArea(
             child: Scaffold(
               body: Column(
@@ -45,21 +42,22 @@ class _HomePageState extends State<HomePage> {
                   Text('로그인 화면으로 가기'),
                   IconButton(
                     icon: Icon(Icons.exit_to_app),
-                    onPressed: (){
-                      Provider.of<FirebaseAuthState>(context, listen: false).signOut();
-                      Provider.of<UserModelState>(context, listen: false).clear();
+                    onPressed: () {
+                      Provider.of<FirebaseAuthState>(context, listen: false)
+                          .signOut();
+                      Provider.of<UserModelState>(context, listen: false)
+                          .clear();
                     },
                   )
                 ],
               ),
             ),
           );
-        }
-        else{
+        } else {
           return SafeArea(
             child: Scaffold(
               key: _drawerKey,
-              endDrawer: _drawer(userModelState,context),
+              endDrawer: _drawer(userModelState, context),
               body: Stack(
                 children: [
                   Column(
@@ -73,32 +71,52 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(5.0),
-                                  child: Text('카이모닝', style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
+                                  child: Text(
+                                    '카이모닝',
+                                    style: TextStyle(
+                                        fontSize: 30.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                                Icon(Icons.directions_car, size: 30.0, color: Colors.red,)
+                                Icon(
+                                  Icons.directions_car,
+                                  size: 30.0,
+                                  color: Colors.red,
+                                )
                               ],
                             ),
                             Row(
                               children: [
-                                Expanded(child: Container(),),
-                                IconButton(icon: Icon(Icons.menu, size: 30.0,),onPressed: (){
-                                  _drawerKey.currentState.openEndDrawer();
-                                },)
+                                Expanded(
+                                  child: Container(),
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.menu,
+                                    size: 30.0,
+                                  ),
+                                  onPressed: () {
+                                    _drawerKey.currentState.openEndDrawer();
+                                  },
+                                )
                               ],
                             )
                           ],
                         ),
                       ),
-                      BodyTab(selectedTab: selectedTap,
+                      BodyTab(
+                          selectedTab: selectedTap,
                           tab1: () {
                             selectedTap = 0;
-                            setState((){});
-                          }, tab2 : () {
+                            setState(() {});
+                          },
+                          tab2: () {
                             selectedTap = 1;
-                            setState((){});
-                          }, tab3: () {
+                            setState(() {});
+                          },
+                          tab3: () {
                             selectedTap = 2;
-                            setState((){});
+                            setState(() {});
                           }),
                       Expanded(
                         child: IndexedStack(
@@ -112,18 +130,26 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-                  (selectedTap == 0)?
-                  Positioned(
-                    bottom: 30.0,
-                    right: 30.0,
-                    child: IconButton(
-                      icon: Icon(Icons.add_circle_outline, size: 50.0, color: Colors.red,),
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateOrderScreen()));
-                      },
-                    ),
-                  ):
-                      Container()
+                  (selectedTap == 0)
+                      ? Positioned(
+                          bottom: 30.0,
+                          right: 30.0,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.add_circle_outline,
+                              size: 50.0,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CreateOrderScreen()));
+                            },
+                          ),
+                        )
+                      : Container()
                 ],
               ),
             ),
@@ -135,85 +161,107 @@ class _HomePageState extends State<HomePage> {
 
   Drawer _drawer(UserModelState userModelState, BuildContext context) {
     return Drawer(
-                child: Stack(
-                  children: [
-                    SizedBox(
-                        width: size.width * 0.7,
-                        height: size.height,
-                        child: Container(
-                          color: Colors.white,
-                        )),
-                    SizedBox(
-                      width: size.width * 0.7,
-                      height: size.height,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: (){},
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.directions_car),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text("라이더 메뉴",
-                                          style:
-                                          TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Consumer<UserModelState>(
-                              builder: (context, userModelState, _){
-                                if(userModelState == null){
-                                  return MyProgressIndicator();
-                                }
-                                else if(userModelState.userModel == null){
-                                  return MyProgressIndicator();
-                                }
-                                else{
-                                  return Column(
-                                    children: [
-                                      Text(userModelState.userModel.userEmail),
-                                      Text(userModelState.userModel.userName),
-                                      Text(userModelState.userModel.userNickName),
-                                      Text(userModelState.userModel.userPhone),
-
-                                    ],
-                                  );
-                                }
-                              },
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0, top: 10.0),
-                              child: InkWell(
-                                onTap: (){
-                                  Provider.of<FirebaseAuthState>(context, listen: false).signOut();
-                                  Provider.of<UserModelState>(context, listen: false).clear();
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.exit_to_app, size: 40.0,),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(
-                                        "로그아웃",
-                                        style: TextStyle(fontSize: 30),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]),
+      child: Stack(
+        children: [
+          SizedBox(
+              width: size.width * 0.7,
+              height: size.height,
+              child: Container(
+                color: Colors.white,
+              )),
+          SizedBox(
+            width: size.width * 0.7,
+            height: size.height,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.directions_car),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text("라이더 메뉴",
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              );
+                  ),
+                  Consumer<UserModelState>(
+                    builder: (context, userModelState, _) {
+                      if (userModelState == null) {
+                        return MyProgressIndicator();
+                      } else if (userModelState.userModel == null) {
+                        return MyProgressIndicator();
+                      } else {
+                        return Column(
+                          children: [
+                            Text(userModelState.userModel.userEmail),
+                            Text(userModelState.userModel.userName),
+                            Text(userModelState.userModel.userNickName),
+                            Text(userModelState.userModel.userPhone),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterUserPage()));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.invert_colors_on,
+                          size: 40.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            "유저 등록",
+                            style: TextStyle(fontSize: 30),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, top: 10.0),
+                    child: InkWell(
+                      onTap: () {
+                        Provider.of<FirebaseAuthState>(context, listen: false)
+                            .signOut();
+                        Provider.of<UserModelState>(context, listen: false)
+                            .clear();
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.exit_to_app,
+                            size: 40.0,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              "로그아웃",
+                              style: TextStyle(fontSize: 30),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_kai_morning_210303/constant/firestore_keys.dart';
 import 'package:demo_kai_morning_210303/model/order_model.dart';
+import 'package:demo_kai_morning_210303/model/user_model.dart';
 import '../../model/rider_model.dart';
 
 
@@ -12,6 +13,12 @@ class Transformers {
     handleData: (snapshot, sink) async {
       sink.add(RiderModel.fromSnapshot(snapshot));
     }
+  );
+
+  final toUser = StreamTransformer<DocumentSnapshot, UserModel>.fromHandlers(
+      handleData: (snapshot, sink) async {
+        sink.add(UserModel.fromSnapshot(snapshot));
+      }
   );
 
   final toOrder = StreamTransformer<DocumentSnapshot, OrderModel>.fromHandlers(

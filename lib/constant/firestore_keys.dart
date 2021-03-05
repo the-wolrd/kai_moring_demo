@@ -27,6 +27,7 @@ const KEY_ORDERER = 'orderer';
 const KEY_PHONENUMBER = 'phoneNumber';
 const KEY_PROCESS = 'process';
 const KEY_ORDERERKEY = 'ordererKey';
+const KEY_ORDERDAY = 'orderday';
 
 const KEY_READY = 'ready';
 const KEY_DOING = 'doing';

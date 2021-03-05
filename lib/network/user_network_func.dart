@@ -19,6 +19,14 @@ class UserNetwork with Transformers {
     return await userRef.set(UserModel.getMapForCreateUser(userKey: userKey, userNickname: userNickName, userDest: userDest, userPhone: userPhone));
     }
   }
+
+  Stream<UserModel> getUserModelStream(String userKey) {
+    return FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ADMIN).collection(COLLECTION_USERS)
+        .doc(userKey)
+        .snapshots()
+        .transform(toUser);
+  }
+
 }
 
 UserNetwork userNetwork = UserNetwork();
