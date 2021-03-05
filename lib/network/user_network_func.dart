@@ -20,12 +20,29 @@ class UserNetwork with Transformers {
     }
   }
 
+  Future<void> updateUserNik({@required String userNickName, @required String userKey}) async {
+    final DocumentReference userRef = FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ADMIN).collection(COLLECTION_USERS).doc(userKey);
+
+    DocumentSnapshot snapshot = await userRef.get();
+
+    return await userRef.update({KEY_USERNICKNAME: userNickName});
+
+  }
+
   Stream<UserModel> getUserModelStream(String userKey) {
     return FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ADMIN).collection(COLLECTION_USERS)
         .doc(userKey)
         .snapshots()
         .transform(toUser);
   }
+
+  Stream<List<UserModel>> getUsers() {
+    return FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ADMIN).collection(COLLECTION_USERS)
+        .snapshots()
+        .transform(toUsers);
+  }
+
+
 
 }
 

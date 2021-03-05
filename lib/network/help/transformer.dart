@@ -59,5 +59,14 @@ class Transformers {
 
     sink.add(orders);
   });
+  final toUsers = StreamTransformer<QuerySnapshot, List<UserModel>>.fromHandlers(handleData: (snapshot, sink) async {
+    List<UserModel> users = [];
+
+    snapshot.docs.forEach((documentSnapshot) {
+        users.add(UserModel.fromSnapshot(documentSnapshot));
+    });
+
+    sink.add(users);
+  });
 
 }

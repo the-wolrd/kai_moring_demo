@@ -1,5 +1,6 @@
 import 'package:demo_kai_morning_210303/screen/sub/create_order.dart';
 import 'package:demo_kai_morning_210303/screen/sub/register_user.dart';
+import 'package:demo_kai_morning_210303/screen/sub/show_user_list.dart';
 import 'package:demo_kai_morning_210303/widgets/body_tab.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
 import 'package:demo_kai_morning_210303/widgets/order_doing_list.dart';
@@ -214,7 +215,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterUserPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterUserPage()));
                     },
                     child: Row(
                       children: [
@@ -226,6 +230,29 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.all(10.0),
                           child: Text(
                             "유저 등록",
+                            style: TextStyle(fontSize: 30),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ShowUserList()));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.invert_colors_on,
+                          size: 40.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            "유저 보기",
                             style: TextStyle(fontSize: 30),
                           ),
                         ),
