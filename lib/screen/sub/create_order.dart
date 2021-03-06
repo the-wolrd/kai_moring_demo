@@ -150,6 +150,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               _timeSelect = selectedTime;
             });
           },
+          nextFunc: dialogStore,
         );
       },
     );
@@ -162,7 +163,9 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
           setState(() {
             _storeSelect = selItem;
           });
-        });
+        },
+          nextFunc: dialogMenu
+        );
       },
     );
   }
@@ -176,6 +179,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               _menuSelect = selectedMenu;
             });
           },
+            nextFunc: dialogUser
         );
       },
     );
@@ -192,6 +196,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               _destSelect = defaultDest;
             });
           },
+            nextFunc: dialogDest
         );
       },
     );
