@@ -1,11 +1,17 @@
 import 'package:demo_kai_morning_210303/model/order_model.dart';
 import 'package:demo_kai_morning_210303/network/order_network_func.dart';
+import 'package:demo_kai_morning_210303/useful/search_engine.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
 import 'package:demo_kai_morning_210303/widgets/order_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OrderDoneList extends StatefulWidget {
+
+  final DateTime selDay;
+
+  OrderDoneList({this.selDay});
+
   @override
   _OrderDoneListState createState() => _OrderDoneListState();
 }
@@ -21,15 +27,18 @@ class _OrderDoneListState extends State<OrderDoneList> {
             return MyProgressIndicator();
           }
           else if (orders.isEmpty){
-            return Text('완료한 주문이 없습니다.');
+            return Container();
           }
           else{
             return ListView.builder(
               itemCount: orders.length,
               itemBuilder: (context, index){
-                return OrderItem(
+                if(SearchEngine.isSameDay(orders[index].orderDay, widget.selDay))
+                  return OrderItem(
                   orderModel: orders[index],
-                );
+                  );
+                else
+                  return Container();
               },
             );
           }

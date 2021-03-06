@@ -18,106 +18,81 @@ import 'package:url_launcher/url_launcher.dart';
 class SendPhoto extends StatefulWidget {
 
   final OrderModel orderModel;
+  final String ordererName;
+  final String ordererPhone;
 
-  SendPhoto({this.orderModel});
-
-  CameraState _cameraState = CameraState();
+  SendPhoto({this.orderModel, this.ordererPhone, this.ordererName});
 
   @override
   _SendPhotoState createState() {
-    _cameraState.getReadyToTakePhoto();
     return _SendPhotoState();
   }
 }
 
 class _SendPhotoState extends State<SendPhoto> {
+
+  TextEditingController _messageController = TextEditingController();
+
+
+  @override
+  void initState() {
+    _messageController.text = '날짜 : ${widget.orderModel.orderDay.month} / ${widget.orderModel.orderDay.day}\n시간 : ${widget.orderModel.time}\n메뉴 : ${widget.orderModel.menu}(${widget.orderModel.store})\n장소 : ${widget.orderModel.dest}\n\n안녕하십니까 카이모닝입니다.\n${widget.ordererName} 님께서 주문하신 메뉴가 배달되었습니다.\n식사 맛있게 하십시오. ';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-
-
-    return ChangeNotifierProvider<CameraState>.value(
-      value: widget._cameraState,
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Consumer<CameraState>(
-                builder: (context, cameraState, _){
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: size.width,
-                        height: size.width,
-                        color: Colors.black,
-                        child: (cameraState.isReadyToTakePhoto)?
-                        _getPreview(cameraState): MyProgressIndicator(),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(child:Container()),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: IconButton(
-                                iconSize: 30.0,
-                                onPressed: (){
-                                  cameraState.changeCameraDirection();
-                                  setState(() {
-                                  });},
-                                icon: Icon(Icons.cached)
-                            ),
-                          ),
-
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Spacer(flex: 1,),
-                          Container(
-                            height:100.0,
-                            width: 100.0,
-                            child: IconButton(
-                              icon:Icon(Icons.camera, size: 100.0,),
-                              onPressed: (){
-//                                if (cameraState.isReadyToTakePhoto) {
-//                                  _attemptTakePhoto(cameraState, context);
-//                                }
-                              },
-                            ),
-                          ),
-                          Spacer(flex: 1,),
-                        ],
-                      )
-                    ],
-                  );
-                },
-              ),
-              SizedBox(height:20.0),
-
-//              FlatButton(
-//                child: Text('전화걸기 (태영번호)'),
-//                onPressed: () async {
-//                  String url = 'tel:01062748997';
-//                  if(await canLaunch(url)){
-//                    await launch(url);
-//                  }
-//                  else{
-//                    throw 'Could not launch ${url}';
-//                  }
-//                },
-//              ),
               FlatButton(
-                child: Text('현재 카메라 작동 x \n문자보내기 (현재 번호 : 진호)'),
+                child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1.0, color: Colors.red),
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                      color: Colors.lightBlueAccent
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text('현재 카메라 작동 x \n ${widget.ordererName} 님께 문자보내기 \n 번호 ${widget.ordererPhone}'),
+                    )),
                 onPressed: () async {
-                  //_sendSMS("테스트 메시지", [widget.orderModel.phone]);
-                  await _sendSMS("음식 맛있게 드세용~~", ['01082610941']);
+                  await _sendSMS(_messageController.text, ['${widget.ordererPhone}']);
                   await orderNetwork.changeOrderProcess(orderKey: widget.orderModel.orderKey, process: KEY_DONE);
                   Navigator.pop(context);
                 },
+              ),
+              Text('이거 버튼임!', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.grey),),
+              SizedBox(height: 20.0,),
+              Text('미리보기 (수정가능)', style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
+              SizedBox(height: 10.0,),
+              Container(
+                width: size.width*0.8,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1.0, color: Colors.grey)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextField(
+                    controller: _messageController,
+                    maxLines: 10,
+                  ),
+                ),
               )
             ],
-          )
-        ),
+          ),
+        )
       ),
     );
   }
@@ -127,52 +102,6 @@ class _SendPhotoState extends State<SendPhoto> {
         .catchError((onError) {
       print(onError);
     });
-  }
-
-  Widget _getPreview(CameraState cameraState) {
-    return ClipRect(
-      child: OverflowBox(
-        alignment: Alignment.center,
-        child: FittedBox(
-          fit: BoxFit.fitWidth,
-          child: Container(
-              width: size.width,
-              height: size.width / cameraState.controller.value.aspectRatio,
-              child: CameraPreview(cameraState.controller)),
-        ),
-      ),
-    );
-  }
-
-  void _attemptTakePhoto(CameraState cameraState, BuildContext context) async {
-
-
-    try{
-      final path = join( (await getTemporaryDirectory()).path, '${DateTime.now().millisecondsSinceEpoch}.png');
-      final path1 = join(await getExternalStorageDirectory().toString(), '${DateTime.now().millisecondsSinceEpoch}.png');
-
-      await cameraState.controller.takePicture(path);
-
-      File imgFile = File(path);
-
-      print("path:      _______________________ $path");
-
-      ImageGallerySaver.saveFile(imgFile.absolute.path).then((value) async {
-        print("value: ______________________ $value");
-        await _sendSMS("음식 맛있게 드세용~~", ['01082610941']);
-        await orderNetwork.changeOrderProcess(orderKey: widget.orderModel.orderKey, process: KEY_DONE);
-
-      }).catchError((e){print(e);});
-
-
-      Navigator.of(context).pop();
-
-
-    } catch(e){
-      print(e);
-    }
-
-
   }
 
 }

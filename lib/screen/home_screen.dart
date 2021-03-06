@@ -1,10 +1,12 @@
 import 'package:demo_kai_morning_210303/screen/sub/create_order.dart';
+import 'package:demo_kai_morning_210303/screen/sub/dialog/create_order_day_dialog.dart';
 import 'package:demo_kai_morning_210303/widgets/body_tab.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
 import 'package:demo_kai_morning_210303/widgets/order_doing_list.dart';
 import 'package:demo_kai_morning_210303/widgets/order_done_list.dart';
 import 'package:demo_kai_morning_210303/widgets/order_ready_list.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../constant/size.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +21,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  DateTime selDay;
 
   int selectedTap = 0;
+
+  @override
+  void initState() {
+
+    selDay = DateTime.now();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +100,26 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Row(
                               children: [
+                                InkWell(
+                                  onTap: () async {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return DaySelectDialog(selDay: (DateTime dateTime) {
+                                          setState(() {
+                                            selDay = dateTime;
+                                          });
+                                        },
+                                          nextFunc: (){},
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Text('${DateFormat('yyyy/MM/dd').format(selDay)}'),
+                                  ),
+                                ),
                                 Expanded(
                                   child: Container(),
                                 ),
@@ -123,9 +155,9 @@ class _HomePageState extends State<HomePage> {
                         child: IndexedStack(
                           index: selectedTap,
                           children: [
-                            OrderReadyList(),
-                            OrderDoingList(),
-                            OrderDoneList()
+                            OrderReadyList(selDay: selDay),
+                            OrderDoingList(selDay: selDay),
+                            OrderDoneList(selDay: selDay)
                           ],
                         ),
                       )

@@ -165,6 +165,8 @@ class _OrderItemState extends State<OrderItem> {
                               MaterialPageRoute(
                                   builder: (context) => SendPhoto(
                                         orderModel: widget.orderModel,
+                                    ordererName: user.userNickname,
+                                    ordererPhone: user.userPhone,
                                       )));
                         },
                         child: Container(
