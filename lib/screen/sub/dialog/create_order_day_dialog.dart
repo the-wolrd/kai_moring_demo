@@ -1,13 +1,8 @@
 import 'package:demo_kai_morning_210303/constant/size.dart';
-import 'package:demo_kai_morning_210303/model/store_model.dart';
-import 'package:demo_kai_morning_210303/network/store_network_func.dart';
-import 'package:demo_kai_morning_210303/useful/search_engine.dart';
-import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class DaySelectDialog extends StatefulWidget {
-
   final Function selDay;
 
   DaySelectDialog({this.selDay});
@@ -17,46 +12,97 @@ class DaySelectDialog extends StatefulWidget {
 }
 
 class _DaySelectDialogState extends State<DaySelectDialog> {
+  CalendarController _calendarController;
+  int _year;
+  int _month;
+  int _day;
+
+  @override
+  initState() {
+    _calendarController = CalendarController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    double width = size.width;
+    double height = size.height;
     return AlertDialog(
-        title: Text('날짜 선택'),
-        content: SizedBox(
-          height: 150.0,
-          width: size.width * 0.6,
+      content: SafeArea(
+        child: SizedBox(
+          height: height,
+          width: width,
           child: Column(
             children: [
-              InkWell(
-                  onTap: (){
-                    widget.selDay(DateTime(2021,3,8));
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('21년 3월 8일'),
-                  )),
-              InkWell(
-                  onTap: (){
-                    widget.selDay(DateTime(2021,3,9));
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('21년 3월 9일'),
-                  )),
-              InkWell(
-                  onTap: (){
-                    widget.selDay(DateTime(2021,3,10));
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('21년 3월 10일'),
-                  )),
-              Text('구현 필요!', style:TextStyle(color: Colors.red, fontWeight: FontWeight.bold))
+              _topBar(),
+              _calendar(),
             ],
-          )
-        ));
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(
+            'OK',
+            style: TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onPressed: () {
+            Navigator.pop(context, "확인");
+            // widget.selDay(DateTime(now.date.year))
+            widget.selDay(DateTime(_year, _month, _day));
+          },
+        ),
+        FlatButton(
+          child: Text('취소', style: TextStyle(color: Colors.black87),),
+          onPressed: () {
+            Navigator.pop(context, "Cancel");
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _calendar() {
+    return Expanded(
+      child: SfCalendar(
+        view: CalendarView.month,
+        controller: _calendarController,
+        onTap: (now) {
+          print(now.date.year);
+          print(now.date.month);
+          print(now.date.day);
+          _year = now.date.year;
+          _month = now.date.month;
+          _day = now.date.day;
+
+        },
+      ),
+    );
+  }
+
+  Widget _topBar() {
+    return SizedBox(
+      child: Row(
+        children: [
+          Spacer(flex: 1),
+          IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                _calendarController.backward();
+              }),
+          Spacer(flex: 10),
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            onPressed: () {
+              _calendarController.forward();
+            },
+          ),
+          Spacer(flex: 1),
+        ],
+      ),
+    );
   }
 }

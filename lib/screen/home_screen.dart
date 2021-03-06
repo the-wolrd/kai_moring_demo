@@ -1,7 +1,4 @@
 import 'package:demo_kai_morning_210303/screen/sub/create_order.dart';
-import 'package:demo_kai_morning_210303/screen/sub/register_user.dart';
-import 'file:///C:/Users/asdf/Desktop/test/demo_kai_morning_210303/lib/screen/show_store_list.dart';
-import 'file:///C:/Users/asdf/Desktop/test/demo_kai_morning_210303/lib/screen/show_user_list.dart';
 import 'package:demo_kai_morning_210303/widgets/body_tab.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
 import 'package:demo_kai_morning_210303/widgets/order_doing_list.dart';
@@ -13,6 +10,8 @@ import 'package:provider/provider.dart';
 
 import '../model/firebase_auth_state.dart';
 import '../model/rider_model_state.dart';
+import 'show_store_list.dart';
+import 'show_user_list.dart';
 
 class HomePage extends StatefulWidget {
   @override
