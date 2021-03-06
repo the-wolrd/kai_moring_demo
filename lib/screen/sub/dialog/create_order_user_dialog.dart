@@ -92,7 +92,7 @@ class _UserSelectDialogState extends State<UserSelectDialog> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: InkWell(
                                     onTap: (){
-                                      widget.selUser(users[index].userNickname, defaultDest: users[index].userDest);
+                                      widget.selUser(users[index].userKey, users[index].userNickname, defaultDest: users[index].userDest);
                                       Navigator.pop(context);
                                       widget.nextFunc();
                                     },

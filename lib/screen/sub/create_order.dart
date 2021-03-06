@@ -20,6 +20,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   String _storeSelect = '';
   String _menuSelect = '';
   String _ordererSelect = '';
+  String _ordererSelectKey;
   String _destSelect = '';
 
   @override
@@ -73,9 +74,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               SizedBox(
                 height: 5.0,
               ),
-              InkWell(
-                  onTap: dialogStore,
-                  child: _showContainer(_storeSelect)),
+              InkWell(onTap: dialogStore, child: _showContainer(_storeSelect)),
               SizedBox(
                 height: 10.0,
               ),
@@ -83,9 +82,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               SizedBox(
                 height: 5.0,
               ),
-              InkWell(
-                  onTap: dialogMenu,
-                  child: _showContainer(_menuSelect)),
+              InkWell(onTap: dialogMenu, child: _showContainer(_menuSelect)),
               SizedBox(
                 height: 10.0,
               ),
@@ -93,9 +90,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               SizedBox(
                 height: 5.0,
               ),
-              InkWell(
-                  onTap: dialogUser,
-                  child: _showContainer(_ordererSelect)),
+              InkWell(onTap: dialogUser, child: _showContainer(_ordererSelect)),
               SizedBox(
                 height: 10.0,
               ),
@@ -103,9 +98,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               SizedBox(
                 height: 5.0,
               ),
-              InkWell(
-                  onTap: dialogDest,
-                  child: _showContainer(_destSelect)),
+              InkWell(onTap: dialogDest, child: _showContainer(_destSelect)),
               SizedBox(
                 height: 20.0,
               ),
@@ -117,7 +110,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  void dialogDay () async {
+  void dialogDay() async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -125,11 +118,14 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
           setState(() {
             _daySelect = dateTime;
           });
-        });
+        },
+        nextFunc:dialogTime ,
+        );
       },
     );
   }
-  void dialogTime () async {
+
+  void dialogTime() async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -144,58 +140,60 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       },
     );
   }
-  void dialogStore () async {
+
+  void dialogStore() async {
     await showDialog(
       context: context,
       builder: (context) {
-        return StoreSelectDialog(selItem: (String selItem) {
-          setState(() {
-            _storeSelect = selItem;
-          });
-        },
-          nextFunc: dialogMenu
-        );
+        return StoreSelectDialog(
+            selItem: (String selItem) {
+              setState(() {
+                _storeSelect = selItem;
+              });
+            },
+            nextFunc: dialogMenu);
       },
     );
   }
-  void dialogMenu () async {
+
+  void dialogMenu() async {
     await showDialog(
       context: context,
       builder: (context) {
         return MenuSelectDialog(
-          selMenu: (String selectedMenu) {
-            setState(() {
-              _menuSelect = selectedMenu;
-            });
-          },
-            nextFunc: dialogUser
-        );
+            selMenu: (String selectedMenu) {
+              setState(() {
+                _menuSelect = selectedMenu;
+              });
+            },
+            nextFunc: dialogUser);
       },
     );
   }
-  void dialogUser () async {
+
+  void dialogUser() async {
     await showDialog(
       context: context,
       builder: (context) {
         return UserSelectDialog(
-          selUser: (String selectedUser,
-              {String defaultDest = ''}) {
-            setState(() {
-              _ordererSelect = selectedUser;
-              _destSelect = defaultDest;
-            });
-          },
-            nextFunc: dialogDest
-        );
+            selUser: (String selectedUserKey, String selectedUser,
+                {String defaultDest = ''}) {
+              setState(() {
+                _ordererSelectKey = selectedUserKey;
+                _ordererSelect = selectedUser;
+                _destSelect = defaultDest;
+              });
+            },
+            nextFunc: dialogDest);
       },
     );
   }
-  void dialogDest () async {
+
+  void dialogDest() async {
     await showDialog(
       context: context,
       builder: (context) {
-        TextEditingController _destController =
-        TextEditingController();
+        TextEditingController _destController = TextEditingController();
         _destController.text = _destSelect;
 
         return AlertDialog(
@@ -218,8 +216,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 },
               ),
               FlatButton(
-                child: Text('취소',
-                    style: TextStyle(color: Colors.black87)),
+                child: Text('취소', style: TextStyle(color: Colors.black87)),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -263,7 +260,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
             menu: _menuSelect,
             time: _timeSelect,
             dest: _destSelect,
-            ordererKey: _ordererSelect,
+            ordererKey: _ordererSelectKey,
             orderDay: _daySelect);
 
         Navigator.pop(context);

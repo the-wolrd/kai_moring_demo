@@ -4,8 +4,9 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class DaySelectDialog extends StatefulWidget {
   final Function selDay;
+  final Function nextFunc;
 
-  DaySelectDialog({this.selDay});
+  DaySelectDialog({this.selDay, this.nextFunc});
 
   @override
   _DaySelectDialogState createState() => _DaySelectDialogState();
@@ -53,6 +54,7 @@ class _DaySelectDialogState extends State<DaySelectDialog> {
             Navigator.pop(context, "확인");
             // widget.selDay(DateTime(now.date.year))
             widget.selDay(DateTime(_year, _month, _day));
+            widget.nextFunc();
           },
         ),
         FlatButton(

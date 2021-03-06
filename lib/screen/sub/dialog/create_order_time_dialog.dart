@@ -61,6 +61,7 @@ class _TimeSelectDialogState extends State<TimeSelectDialog> {
               onTap: () {
                 widget.selTime('11:00 ~ 12:00');
                 Navigator.pop(context);
+                widget.nextFunc();
               },
               child: Container(
                   height: 50.0,
