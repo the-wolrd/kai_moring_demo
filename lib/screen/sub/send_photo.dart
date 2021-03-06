@@ -51,46 +51,52 @@ class _SendPhotoState extends State<SendPhoto> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FlatButton(
-                child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1.0, color: Colors.red),
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      color: Colors.lightBlueAccent
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                SizedBox(height: 20.0,),
+                Text('미리보기 (수정가능)', style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
+                SizedBox(height: 10.0,),
+                Container(
+                  width: size.width*0.8,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1.0, color: Colors.grey),
+                    color: Colors.grey
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextField(
+                      controller: _messageController,
+                      maxLines: 10,
+                      decoration: textInputDecor('메세지를 쓰세요.'),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text('현재 카메라 작동 x \n ${widget.ordererName} 님께 문자보내기 \n 번호 ${widget.ordererPhone}'),
-                    )),
-                onPressed: () async {
-                  await _sendSMS(_messageController.text, ['${widget.ordererPhone}']);
-                  await orderNetwork.changeOrderProcess(orderKey: widget.orderModel.orderKey, process: KEY_DONE);
-                  Navigator.pop(context);
-                },
-              ),
-              Text('이거 버튼임!', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.grey),),
-              SizedBox(height: 20.0,),
-              Text('미리보기 (수정가능)', style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),),
-              SizedBox(height: 10.0,),
-              Container(
-                width: size.width*0.8,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1.0, color: Colors.grey)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: _messageController,
-                    maxLines: 10,
                   ),
                 ),
-              )
-            ],
+                SizedBox(height: 30.0,),
+                FlatButton(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1.0, color: Colors.red),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          color: Colors.grey
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text('현재 카메라 작동 x \n ${widget.ordererName} 님께 문자보내기 \n 번호 ${widget.ordererPhone}'),
+                      )),
+                  onPressed: () async {
+                    await _sendSMS(_messageController.text, ['${widget.ordererPhone}']);
+                    await orderNetwork.changeOrderProcess(orderKey: widget.orderModel.orderKey, process: KEY_DONE);
+                    Navigator.pop(context);
+                  },
+                ),
+                Text('이거 버튼임!', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.grey),),
+              ],
+            ),
           ),
         )
       ),
@@ -102,6 +108,34 @@ class _SendPhotoState extends State<SendPhoto> {
         .catchError((onError) {
       print(onError);
     });
+  }
+
+  InputDecoration textInputDecor(String hint) {
+    return InputDecoration(
+        hintText: hint,
+        enabledBorder: activeInputBorder(),
+        focusedBorder: activeInputBorder(),
+        errorBorder: errorInputBorder(),
+        focusedErrorBorder: errorInputBorder(),
+        filled: true,
+        fillColor: Colors.grey[100]);
+  }
+
+  OutlineInputBorder errorInputBorder() {
+    return OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.redAccent,
+        ),
+        borderRadius: BorderRadius.circular(12.0));
+  }
+
+  OutlineInputBorder activeInputBorder() {
+    return OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.grey[500],
+      ),
+      borderRadius: BorderRadius.circular(12.0),
+    );
   }
 
 }

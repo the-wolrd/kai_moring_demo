@@ -39,34 +39,35 @@ class _AuthScreenState extends State<AuthScreen> {
             alignment: Alignment.topCenter,
             children: [
               Container(
-                  color: Colors.black, width: size.width, height: size.height),
-              Image.asset(
-                'assets/back_image.gif',
-                width: size.width,
-                fit: BoxFit.fitWidth,
-              ),
-              Image.asset('assets/black_overlay.png',
-                  fit: BoxFit.fill, height: size.height, width: size.width),
+                  color: Colors.grey, width: size.width, height: size.height),
               Positioned(
-                top: size.height * 0.3,
-                child: Column(
-                  children: [
-                    Text(
-                      "카이모닝",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "따뜻하고 든든한 아침 챙겨드세요",
-                      style: TextStyle(color: Colors.white, fontSize: 20.0),
-                    ),
-                  ],
+                top: size.height * 0.2,
+                child: Image.asset(
+                  'assets/login_back.png',
+                  width: size.width * 0.5,
+                  fit: BoxFit.fitWidth,
                 ),
               ),
+              // Positioned(
+              //   top: size.height * 0.3,
+              //   child: Column(
+              //     children: [
+              //       Text(
+              //         "카이모닝",
+              //         style: TextStyle(
+              //             color: Colors.white,
+              //             fontSize: 30.0,
+              //             fontWeight: FontWeight.bold),
+              //       ),
+              //       Text(
+              //         "따뜻하고 든든한 아침 챙겨드세요",
+              //         style: TextStyle(color: Colors.white, fontSize: 20.0),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Positioned(
-                bottom: 100.0,
+                top: size.height * 0.5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -101,9 +102,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                 size: 30.0,
                                 color: Colors.red,
                               ),
-                              Spacer(flex: 1),
-                              Text('로그인'),
-                              Spacer(flex: 1),
+                              Spacer(flex: 2),
+                              Text('로그인', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),),
+                              Spacer(flex: 3),
                             ],
                           ),
                         ),

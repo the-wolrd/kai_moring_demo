@@ -42,25 +42,26 @@ class _LoginDialogState extends State<LoginDialog> {
     return SafeArea(
       child: Scaffold(
         body: AlertDialog(
-              title: Text("라이더 로그인"),
+              title: Center(child: Text("로그인")),
               content: SizedBox(
                 width: 250,
-                height: 120,
+                height: 150,
                 child: Column(
                   children: [
                     SizedBox(
                       height: 40.0,
                       child: TextField(
                         controller: _idController,
-                        decoration: InputDecoration(hintText: "아이디"),
+                        decoration: textInputDecor("아이디"),
                       ),
                     ),
+                    SizedBox(height: 10.0,),
                     SizedBox(
                       height: 40.0,
                       child: TextField(
                         controller: _pwController,
                         obscureText: true,
-                        decoration: InputDecoration(hintText: "비밀번호"),
+                        decoration: textInputDecor("비밀번호"),
                       ),
                     ),
                     Padding(
@@ -119,6 +120,33 @@ class _LoginDialogState extends State<LoginDialog> {
             )
 
       ),
+    );
+  }
+  InputDecoration textInputDecor(String hint) {
+    return InputDecoration(
+        hintText: hint,
+        enabledBorder: activeInputBorder(),
+        focusedBorder: activeInputBorder(),
+        errorBorder: errorInputBorder(),
+        focusedErrorBorder: errorInputBorder(),
+        filled: true,
+        fillColor: Colors.grey[100]);
+  }
+
+  OutlineInputBorder errorInputBorder() {
+    return OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.redAccent,
+        ),
+        borderRadius: BorderRadius.circular(12.0));
+  }
+
+  OutlineInputBorder activeInputBorder() {
+    return OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.grey[500],
+      ),
+      borderRadius: BorderRadius.circular(12.0),
     );
   }
 }

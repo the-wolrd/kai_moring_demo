@@ -102,8 +102,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Row(
                               children: [
-                                InkWell(
-                                  onTap: () async {
+                                IconButton(
+                                  icon: Icon(Icons.calendar_today_outlined,
+                                    size: 30.0,) ,
+                                  onPressed: ()async {
                                     await showDialog(
                                       context: context,
                                       builder: (context) {
@@ -117,11 +119,8 @@ class _HomePageState extends State<HomePage> {
                                       },
                                     );
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: Text('${DateFormat('yyyy/MM/dd').format(_selDay)}'),
-                                  ),
                                 ),
+
                                 Expanded(
                                   child: Container(),
                                 ),
