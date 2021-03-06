@@ -7,6 +7,7 @@ import 'package:demo_kai_morning_210303/model/user_model.dart';
 import 'package:demo_kai_morning_210303/network/order_network_func.dart';
 import 'package:demo_kai_morning_210303/network/store_network_func.dart';
 import 'package:demo_kai_morning_210303/network/user_network_func.dart';
+import 'package:demo_kai_morning_210303/screen/sub/dialog/show_user_dialog.dart';
 import 'package:demo_kai_morning_210303/useful/generate_key.dart';
 import 'package:demo_kai_morning_210303/useful/search_engine.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
@@ -97,7 +98,14 @@ class _ShowUserListState extends State<ShowUserList> {
                               _searchController.text == '' ||
                               _isSearchContain) {
                             return InkWell(
-                              onTap: () {},
+                              onLongPress: () async {
+                                await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                  return ShowUserDialog(userModel: users[index]);
+                                },
+                                );
+                              },
                               child: Column(
                                 children: [
                                   Padding(

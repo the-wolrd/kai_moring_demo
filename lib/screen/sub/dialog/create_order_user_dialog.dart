@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 class UserSelectDialog extends StatefulWidget {
 
   final Function selUser;
+  final Function nextFunc;
 
-  UserSelectDialog({this.selUser});
+  UserSelectDialog({this.selUser, this.nextFunc});
 
   @override
   _UserSelectDialogState createState() => _UserSelectDialogState();
@@ -93,6 +94,7 @@ class _UserSelectDialogState extends State<UserSelectDialog> {
                                     onTap: (){
                                       widget.selUser(users[index].userNickname, defaultDest: users[index].userDest);
                                       Navigator.pop(context);
+                                      widget.nextFunc();
                                     },
                                     child: Container(
                                         width: size.width * 0.8,

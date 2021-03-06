@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 class StoreSelectDialog extends StatefulWidget {
 
   final Function selItem;
+  final Function nextFunc;
 
-  StoreSelectDialog({this.selItem});
+  StoreSelectDialog({this.selItem, this.nextFunc});
 
   @override
   _StoreSelectDialogState createState() => _StoreSelectDialogState();
@@ -94,6 +95,7 @@ class _StoreSelectDialogState extends State<StoreSelectDialog> {
                                 onTap: (){
                                   widget.selItem(stores[index].storeName);
                                   Navigator.pop(context);
+                                  widget.nextFunc();
                                 },
                                 child: Container(
                                     height: 50.0,
