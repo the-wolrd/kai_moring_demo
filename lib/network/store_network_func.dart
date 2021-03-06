@@ -10,13 +10,18 @@ import '../model/rider_model.dart';
 import 'help/transformer.dart';
 
 class StoreNetwork with Transformers {
-
   // @required List<String> storeItem 이건 뺀다. 처음 등록할때는 메뉴 추가 ㄴㄴㄴ
   Future<void> createNewStore(
-      {@required String storeKey, @required String storeName, @required String storePhone, @required double lat, @required double lon}) async {
-    final DocumentReference storeRef = FirebaseFirestore.instance.collection(
-        COLLECTION_HOME).doc(DOCUMENT_ASSET).collection(COLLECTION_STORES).doc(
-        storeKey);
+      {@required String storeKey,
+      @required String storeName,
+      @required String storePhone,
+      @required double lat,
+      @required double lon}) async {
+    final DocumentReference storeRef = FirebaseFirestore.instance
+        .collection(COLLECTION_HOME)
+        .doc(DOCUMENT_ASSET)
+        .collection(COLLECTION_STORES)
+        .doc(storeKey);
 
     DocumentSnapshot snapshot = await storeRef.get();
 
@@ -28,35 +33,66 @@ class StoreNetwork with Transformers {
           storeItem: [],
           // 처음엔 빈 아이템들
           lat: lat,
-          lon: lon
-      ));
+          lon: lon));
     }
   }
 
+  Future<void> updateStoreInfo(
+      @required String storeKey,
+      @required String storePhone,
+      @required double lat,
+      @required double lon,
+      @required List<dynamic> storeItem) async {
+    final DocumentReference storeRef = FirebaseFirestore.instance
+        .collection(COLLECTION_HOME)
+        .doc(DOCUMENT_ASSET)
+        .collection(COLLECTION_STORES)
+        .doc(storeKey);
+
+    return await storeRef.update({
+      KEY_STOREPHONE: storePhone,
+      KEY_LAT: lat,
+      KEY_LON: lon,
+      KEY_STOREITEM: storeItem,
+      KEY_LASTUPDATE: DateTime.now()
+    });
+  }
+
   Stream<List<StoreModel>> getStores() {
-    return FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ASSET).collection(COLLECTION_STORES)
+    return FirebaseFirestore.instance
+        .collection(COLLECTION_HOME)
+        .doc(DOCUMENT_ASSET)
+        .collection(COLLECTION_STORES)
         .snapshots()
         .transform(toStores);
   }
 
   Stream<List<StoreModel>> getStoresFromKeys(List<String> keys) {
-
-    final toStoresFromKeys = StreamTransformer<QuerySnapshot, List<StoreModel>>.fromHandlers(handleData: (snapshot, sink) async {
+    final toStoresFromKeys =
+        StreamTransformer<QuerySnapshot, List<StoreModel>>.fromHandlers(
+            handleData: (snapshot, sink) async {
       List<StoreModel> stores = [];
 
       keys.forEach((element) async {
-        DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ASSET).collection(COLLECTION_STORES).doc(element).get();
+        DocumentSnapshot snapshot = await FirebaseFirestore.instance
+            .collection(COLLECTION_HOME)
+            .doc(DOCUMENT_ASSET)
+            .collection(COLLECTION_STORES)
+            .doc(element)
+            .get();
         stores.add(StoreModel.fromSnapshot(snapshot));
       });
 
       sink.add(stores);
     });
 
-    return FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ASSET).collection(COLLECTION_STORES)
+    return FirebaseFirestore.instance
+        .collection(COLLECTION_HOME)
+        .doc(DOCUMENT_ASSET)
+        .collection(COLLECTION_STORES)
         .snapshots()
         .transform(toStoresFromKeys);
   }
-
 }
 
 StoreNetwork storeNetwork = StoreNetwork();

@@ -52,18 +52,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 height: 5.0,
               ),
               InkWell(
-                  onTap: () async {
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return DaySelectDialog(selDay: (DateTime dateTime) {
-                          setState(() {
-                            _daySelect = dateTime;
-                          });
-                        });
-                      },
-                    );
-                  },
+                  onTap: dialogDay,
                   child: _showContainer(
                       '${DateFormat('yyyy-MM-dd').format(_daySelect)}')),
               SizedBox(
@@ -74,20 +63,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 height: 5.0,
               ),
               InkWell(
-                onTap: () async {
-                  await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return TimeSelectDialog(
-                        selTime: (String selectedTime) {
-                          setState(() {
-                            _timeSelect = selectedTime;
-                          });
-                        },
-                      );
-                    },
-                  );
-                },
+                onTap: dialogTime,
                 child: _showContainer(_timeSelect),
               ),
               SizedBox(
@@ -98,18 +74,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 height: 5.0,
               ),
               InkWell(
-                  onTap: () async {
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return StoreSelectDialog(selItem: (String selItem) {
-                          setState(() {
-                            _storeSelect = selItem;
-                          });
-                        });
-                      },
-                    );
-                  },
+                  onTap: dialogStore,
                   child: _showContainer(_storeSelect)),
               SizedBox(
                 height: 10.0,
@@ -119,20 +84,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 height: 5.0,
               ),
               InkWell(
-                  onTap: () async {
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return MenuSelectDialog(
-                          selMenu: (String selectedMenu) {
-                            setState(() {
-                              _menuSelect = selectedMenu;
-                            });
-                          },
-                        );
-                      },
-                    );
-                  },
+                  onTap: dialogMenu,
                   child: _showContainer(_menuSelect)),
               SizedBox(
                 height: 10.0,
@@ -142,22 +94,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 height: 5.0,
               ),
               InkWell(
-                  onTap: () async {
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return UserSelectDialog(
-                          selUser: (String selectedUser,
-                              {String defaultDest = ''}) {
-                            setState(() {
-                              _ordererSelect = selectedUser;
-                              _destSelect = defaultDest;
-                            });
-                          },
-                        );
-                      },
-                    );
-                  },
+                  onTap: dialogUser,
                   child: _showContainer(_ordererSelect)),
               SizedBox(
                 height: 10.0,
@@ -167,43 +104,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 height: 5.0,
               ),
               InkWell(
-                  onTap: () async {
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        TextEditingController _destController =
-                            TextEditingController();
-
-                        return AlertDialog(
-                            title: Text('수령지 변경'),
-                            content: TextField(
-                              controller: _destController,
-                            ),
-                            actions: [
-                              FlatButton(
-                                child: Text(
-                                  '선택',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  _destSelect = _destController.text;
-                                  Navigator.pop(context);
-                                  setState(() {});
-                                },
-                              ),
-                              FlatButton(
-                                child: Text('취소',
-                                    style: TextStyle(color: Colors.black87)),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ]);
-                      },
-                    );
-                  },
+                  onTap: dialogDest,
                   child: _showContainer(_destSelect)),
               SizedBox(
                 height: 20.0,
@@ -213,6 +114,118 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void dialogDay () async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return DaySelectDialog(selDay: (DateTime dateTime) {
+          setState(() {
+            _daySelect = dateTime;
+          });
+        });
+      },
+    );
+  }
+  void dialogTime () async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return TimeSelectDialog(
+          selTime: (String selectedTime) {
+            setState(() {
+              _timeSelect = selectedTime;
+            });
+          },
+          nextFunc: dialogStore,
+        );
+      },
+    );
+  }
+  void dialogStore () async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StoreSelectDialog(selItem: (String selItem) {
+          setState(() {
+            _storeSelect = selItem;
+          });
+        },
+          nextFunc: dialogMenu
+        );
+      },
+    );
+  }
+  void dialogMenu () async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return MenuSelectDialog(
+          selMenu: (String selectedMenu) {
+            setState(() {
+              _menuSelect = selectedMenu;
+            });
+          },
+            nextFunc: dialogUser
+        );
+      },
+    );
+  }
+  void dialogUser () async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return UserSelectDialog(
+          selUser: (String selectedUser,
+              {String defaultDest = ''}) {
+            setState(() {
+              _ordererSelect = selectedUser;
+              _destSelect = defaultDest;
+            });
+          },
+            nextFunc: dialogDest
+        );
+      },
+    );
+  }
+  void dialogDest () async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController _destController =
+        TextEditingController();
+        _destController.text = _destSelect;
+
+        return AlertDialog(
+            title: Text('수령지 변경'),
+            content: TextField(
+              controller: _destController,
+            ),
+            actions: [
+              FlatButton(
+                child: Text(
+                  '선택',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () {
+                  _destSelect = _destController.text;
+                  Navigator.pop(context);
+                  setState(() {});
+                },
+              ),
+              FlatButton(
+                child: Text('취소',
+                    style: TextStyle(color: Colors.black87)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ]);
+      },
     );
   }
 

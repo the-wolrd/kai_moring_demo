@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 class MenuSelectDialog extends StatefulWidget {
 
   final Function selMenu;
+  final Function nextFunc;
 
-  MenuSelectDialog({this.selMenu});
+  MenuSelectDialog({this.selMenu, this.nextFunc});
 
   @override
   _MenuSelectDialogState createState() => _MenuSelectDialogState();
@@ -44,6 +45,7 @@ class _MenuSelectDialogState extends State<MenuSelectDialog> {
             onPressed: () {
               widget.selMenu(_menuController.text);
               Navigator.pop(context);
+              widget.nextFunc();
             },
           ),
           FlatButton(

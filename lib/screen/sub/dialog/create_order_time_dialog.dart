@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 class TimeSelectDialog extends StatefulWidget {
 
   final Function selTime;
+  final Function nextFunc;
 
-  TimeSelectDialog({this.selTime});
+  TimeSelectDialog({this.selTime, this.nextFunc});
 
   @override
   _TimeSelectDialogState createState() => _TimeSelectDialogState();
@@ -30,6 +31,7 @@ class _TimeSelectDialogState extends State<TimeSelectDialog> {
               onTap: () {
                 widget.selTime('08:30 ~ 09:30');
                 Navigator.pop(context);
+                widget.nextFunc();
               },
               child: Container(
                   height: 50.0,
