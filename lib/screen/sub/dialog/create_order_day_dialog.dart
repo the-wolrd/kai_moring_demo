@@ -77,6 +77,7 @@ class _DaySelectDialogState extends State<DaySelectDialog> {
           _year = now.date.year;
           _month = now.date.month;
           _day = now.date.day;
+          print("dsada");
 
         },
       ),
