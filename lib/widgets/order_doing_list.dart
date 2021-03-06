@@ -9,14 +9,16 @@ import 'package:provider/provider.dart';
 class OrderDoingList extends StatefulWidget {
 
   final DateTime selDay;
+  final String selTime;
 
-  OrderDoingList({this.selDay});
+  OrderDoingList({this.selDay, this.selTime});
 
   @override
   _OrderDoingListState createState() => _OrderDoingListState();
 }
 
 class _OrderDoingListState extends State<OrderDoingList> {
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<OrderModel>>.value(
@@ -33,12 +35,14 @@ class _OrderDoingListState extends State<OrderDoingList> {
             return ListView.builder(
               itemCount: orders.length,
               itemBuilder: (context, index){
-                if(SearchEngine.isSameDay(orders[index].orderDay, widget.selDay))
-                return OrderItem(
-                  orderModel: orders[index],
-                );
-                else
+                if(SearchEngine.isSameDay(orders[index].orderDay, widget.selDay) && widget.selTime == '종일' || widget.selTime == orders[index].time){
+                  return OrderItem(
+                    orderModel: orders[index],
+                  );
+                }
+                else{
                   return Container();
+                }
               },
             );
           }

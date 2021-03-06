@@ -21,7 +21,7 @@ class _BodyTabState extends State<BodyTab> {
 
 
   @override
-  Widget build( BuildContext context) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -30,36 +30,51 @@ class _BodyTabState extends State<BodyTab> {
           child: Row(
             children: [
               Expanded(
-                child: InkWell(
-                  child: Center(
-                    child: Text(
-                      '대기중',
-                      style: TextStyle(color: widget.selectedTab == 0 ? Colors.lightGreen : Colors.black26,),
+                child: Stack(
+                  children: [
+                    Positioned(top:0.0, right:20.0, child: Text('..', style: TextStyle(fontSize: 15.0, color: Colors.lightGreen),),),
+                    InkWell(
+                      child: Center(
+                        child: Text(
+                          '대기중',
+                          style: TextStyle(color: widget.selectedTab == 0 ? Colors.lightGreen : Colors.black26,),
+                        ),
+                      ),
+                      onTap: widget.tab1,
                     ),
-                  ),
-                  onTap: widget.tab1,
+                  ],
                 ),
               ),
               Expanded(
-                child: InkWell(
-                  child: Center(
-                    child: Text(
-                      '진행중',
-                      style: TextStyle(color: widget.selectedTab == 1 ? Colors.lightBlue : Colors.black26,),
+                child: Stack(
+                  children: [
+                    Positioned(top:0.0, right:20.0, child: Text('..', style: TextStyle(fontSize: 15.0, color: Colors.lightBlue),),),
+                    InkWell(
+                      child: Center(
+                        child: Text(
+                          '진행중',
+                          style: TextStyle(color: widget.selectedTab == 1 ? Colors.lightBlue : Colors.black26,),
+                        ),
+                      ),
+                      onTap: widget.tab2,
                     ),
-                  ),
-                  onTap: widget.tab2,
+                  ],
                 ),
               ),
               Expanded(
-                child: InkWell(
-                  child: Center(
-                    child: Text(
-                      '완료',
-                      style: TextStyle(color: widget.selectedTab == 2 ? Colors.red : Colors.black26,),
+                child: Stack(
+                  children: [
+                    Positioned(top:0.0, right:20.0, child: Text('..', style: TextStyle(fontSize: 15.0, color: Colors.red),),),
+                    InkWell(
+                      child: Center(
+                        child: Text(
+                          '완료',
+                          style: TextStyle(color: widget.selectedTab == 2 ? Colors.red : Colors.black26,),
+                        ),
+                      ),
+                      onTap: widget.tab3,
                     ),
-                  ),
-                  onTap: widget.tab3,
+                  ],
                 ),
               ),
             ],

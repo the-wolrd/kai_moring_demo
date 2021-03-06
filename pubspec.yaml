@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons:
   provider: ^4.3.1
   firebase_auth: ^0.20.0+1
-  firebase_core: ^0.7.0
+  # firebase_core: ^0.7.0
   cloud_firestore: ^0.16.0
   cached_network_image: ^2.5.0
   url_launcher: ^5.7.10 # 이건 전화걸기 용으로 사용하면 될듯

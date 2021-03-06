@@ -18,10 +18,13 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   DateTime _daySelect = DateTime.now();
   String _timeSelect = '';
   String _storeSelect = '';
+  String _storeSelectKey;
   String _menuSelect = '';
   String _ordererSelect = '';
   String _ordererSelectKey;
   String _destSelect = '';
+  int _prioritySelect;
+
 
   @override
   Widget build(BuildContext context) {
@@ -146,9 +149,11 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       context: context,
       builder: (context) {
         return StoreSelectDialog(
-            selItem: (String selItem) {
+            selStoreAndPriority: (String selStore, int priority, String storeKey) {
               setState(() {
-                _storeSelect = selItem;
+                _storeSelect = selStore;
+                _prioritySelect = priority;
+                _storeSelectKey = storeKey;
               });
             },
             nextFunc: dialogMenu);
@@ -161,6 +166,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       context: context,
       builder: (context) {
         return MenuSelectDialog(
+          storeKey: _storeSelectKey,
             selMenu: (String selectedMenu) {
               setState(() {
                 _menuSelect = selectedMenu;
@@ -246,26 +252,42 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     return FlatButton(
       color: Colors.blue,
       onPressed: () async {
-        showModalBottomSheet(
-            context: context,
-            builder: (_) {
-              return MyProgressIndicator();
-            },
-            isDismissible: false,
-            enableDrag: false);
+        if(_daySelect != '' && _timeSelect != '' && _storeSelect != '' && _menuSelect != '' && _destSelect != '' && _ordererSelect != ''){
+          showModalBottomSheet(
+              context: context,
+              builder: (_) {
+                return MyProgressIndicator();
+              },
+              isDismissible: false,
+              enableDrag: false);
 
-        await orderNetwork.createNewOrder(
-            orderKey: generateOrderKey(store: _storeSelect),
-            store: _storeSelect,
-            menu: _menuSelect,
-            time: _timeSelect,
-            dest: _destSelect,
-            ordererKey: _ordererSelectKey,
-            orderDay: _daySelect);
+          await orderNetwork.createNewOrder(
+              orderKey: generateOrderKey(store: _storeSelect),
+              store: _storeSelect,
+              menu: _menuSelect,
+              time: _timeSelect,
+              dest: _destSelect,
+              ordererKey: _ordererSelectKey,
+              orderDay: _daySelect,
+              priority: _prioritySelect);
 
-        Navigator.pop(context);
+          Navigator.pop(context);
 
-        Navigator.pop(context);
+          Navigator.pop(context);
+        }
+        else{
+          showModalBottomSheet(
+              context: context,
+              builder: (_) {
+                return Center(child: Text('적절하지 않은 order 양식입니다.'));
+              },
+              isDismissible: false,
+              enableDrag: false);
+          await Future.delayed(Duration(seconds: 2), (){});
+          Navigator.pop(context);
+        }
+
+
       },
       child: Text(
         '신규 주문 추가',

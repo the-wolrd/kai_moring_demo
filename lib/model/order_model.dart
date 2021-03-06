@@ -14,6 +14,7 @@ class OrderModel{
   final String process; // ready, doing, done
   final String ordererKey;
   final DateTime orderDay;
+  final int priority;
 
   final DocumentReference reference;
 
@@ -27,7 +28,8 @@ class OrderModel{
         dest = map[KEY_ORDERDEST],
         process = map[KEY_PROCESS],
         ordererKey = map[KEY_ORDERERKEY],
-        orderDay =  (map[KEY_ORDERDAY]as Timestamp).toDate();
+        orderDay =  (map[KEY_ORDERDAY]as Timestamp).toDate(),
+        priority = map[KEY_PRIORITY];
 
   OrderModel.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
@@ -42,6 +44,7 @@ class OrderModel{
     String dest,
     String ordererKey,
     DateTime orderDay,
+    int priority
   }){
     Map<String, dynamic> map = Map();
 
@@ -56,6 +59,7 @@ class OrderModel{
     map[KEY_PROCESS] = 'ready';
     map[KEY_ORDERERKEY] = ordererKey;
     map[KEY_ORDERDAY] = orderDay;
+    map[KEY_PRIORITY] = priority;
 
     return map;
   }

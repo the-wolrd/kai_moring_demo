@@ -8,14 +8,17 @@ import 'package:provider/provider.dart';
 
 class OrderReadyList extends StatefulWidget {
   final DateTime selDay;
+  final String selTime;
 
-  OrderReadyList({this.selDay});
+  OrderReadyList({this.selDay, this.selTime});
 
   @override
   _OrderReadyListState createState() => _OrderReadyListState();
 }
 
 class _OrderReadyListState extends State<OrderReadyList> {
+
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<OrderModel>>.value(
@@ -28,15 +31,18 @@ class _OrderReadyListState extends State<OrderReadyList> {
           else if (orders.isEmpty){
             return Container();}
           else{
+
             return ListView.builder(
               itemCount: orders.length,
               itemBuilder: (context, index){
-                if(SearchEngine.isSameDay(orders[index].orderDay, widget.selDay))
-                return OrderItem(
-                  orderModel: orders[index],
-                );
-                else
+                if(SearchEngine.isSameDay(orders[index].orderDay, widget.selDay) && widget.selTime == '종일' || widget.selTime == orders[index].time){
+                  return OrderItem(
+                    orderModel: orders[index],
+                  );
+                }
+                else{
                   return Container();
+                }
               },
             );
           }

@@ -8,10 +8,11 @@ import 'package:provider/provider.dart';
 
 class MenuSelectDialog extends StatefulWidget {
 
+  final String storeKey;
   final Function selMenu;
   final Function nextFunc;
 
-  MenuSelectDialog({this.selMenu, this.nextFunc});
+  MenuSelectDialog({this.storeKey, this.selMenu, this.nextFunc});
 
   @override
   _MenuSelectDialogState createState() => _MenuSelectDialogState();
@@ -30,31 +31,62 @@ class _MenuSelectDialogState extends State<MenuSelectDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text('메뉴 선정(임시)'),
-        content: TextField(
-          controller: _menuController,
+        content: StreamProvider<StoreModel>.value(
+          value: storeNetwork.getStoreFromKey(widget.storeKey),
+          child: Consumer<StoreModel>(
+            builder: (context, store, _){
+              if (store == null){
+                return Text('메뉴를 고를 수 없습니다.');
+              }
+              else if(store.storeItem.isEmpty){
+                return Text('메뉴를 고를 수 없습니다.');
+              }
+              else{
+                return SizedBox(
+                  height: 300.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('${store.storeName}', style: TextStyle(fontSize: 20.0),),
+                      SizedBox(height: 15.0,),
+                      Container(
+                        height: 250.0,
+                        width: 200.0,
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1.0, color: Colors.grey)
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemBuilder: (context, index){
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical:3.0, horizontal: 10.0),
+                              child: InkWell(
+                                onTap: (){
+                                  widget.selMenu(store.storeItem[index]);
+                                  Navigator.pop(context);
+                                  widget.nextFunc();
+                                },
+                                child: Container(
+                                  height: 50.0,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(15.0)),
+                                      color: Colors.grey[50]),
+                                  child: Center(child: Text('${store.storeItem[index]}', style: TextStyle(color: Colors.black87),)),
+                                ),
+                              ),
+                            );
+                          },
+                          itemCount: store.storeItem.length,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
         ),
-        actions: [
-          FlatButton(
-            child: Text(
-              '선택',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () {
-              widget.selMenu(_menuController.text);
-              Navigator.pop(context);
-              widget.nextFunc();
-            },
-          ),
-          FlatButton(
-            child: Text('취소',
-                style: TextStyle(color: Colors.black87)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ]);
+    );
   }
 }

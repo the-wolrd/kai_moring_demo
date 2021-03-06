@@ -17,6 +17,7 @@ class OrderNetwork with Transformers {
     @required String dest,
     @required String ordererKey,
     @required DateTime orderDay,
+    @required int priority,
   }) async {
     final DocumentReference orderRef = FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ADMIN).collection(COLLECTION_ORDERS).doc(orderKey);
 
@@ -31,6 +32,7 @@ class OrderNetwork with Transformers {
         dest: dest,
         ordererKey: ordererKey,
         orderDay: orderDay,
+        priority: priority
       ));
     }
   }
@@ -46,13 +48,13 @@ class OrderNetwork with Transformers {
   Stream<List<OrderModel>> getOrdersReady() {
     return FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ADMIN).collection(COLLECTION_ORDERS)
         .snapshots()
-        .transform(toReadyOrder);
+        .transform(toReadyOrder).transform(toPriorityStore);
   }
 
   Stream<List<OrderModel>> getOrdersDoing() {
     return FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ADMIN).collection(COLLECTION_ORDERS)
         .snapshots()
-        .transform(toDoingOrder);
+        .transform(toDoingOrder).transform(toPriorityDest);
   }
 
   Stream<List<OrderModel>> getOrdersDone() {

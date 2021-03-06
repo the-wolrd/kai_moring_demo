@@ -6,6 +6,7 @@ import 'package:demo_kai_morning_210303/network/order_network_func.dart';
 import 'package:demo_kai_morning_210303/network/store_network_func.dart';
 import 'package:demo_kai_morning_210303/network/user_network_func.dart';
 import 'package:demo_kai_morning_210303/screen/sub/dialog/show_store_dialog.dart';
+import 'package:demo_kai_morning_210303/screen/sub/set_store_priority.dart';
 import 'package:demo_kai_morning_210303/useful/generate_key.dart';
 import 'package:demo_kai_morning_210303/useful/search_engine.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
@@ -67,7 +68,12 @@ class _ShowStoreListState extends State<ShowStoreList> {
                   Positioned(
                     top: 10.0,
                       right: 10.0,
-                      child: InkWell(child: Padding(
+                      child: InkWell(
+                          onTap: ()async{
+                            List<dynamic> initKeys = await storeNetwork.getStoresPriority();
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> SetStorePriority(initKeys:initKeys)));
+                          },
+                          child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text('픽업 순위'),
                       )))
@@ -97,7 +103,7 @@ class _ShowStoreListState extends State<ShowStoreList> {
 
                           if (_searchController.text == null || _searchController.text == '' || _isSearchContain){
                             return InkWell(
-                              onLongPress: () async {
+                              onTap: () async {
                                 await showDialog(
                                   context: context,
                                   builder: (context) {
@@ -110,7 +116,7 @@ class _ShowStoreListState extends State<ShowStoreList> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      height: 100.0,
+                                      height: 130.0,
                                       width: size.width*0.9,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(15.0)),

@@ -12,7 +12,6 @@ const KEY_USERNICKNAME = 'userNickName';
 const KEY_USEREMAIL = 'userEmail';
 const KEY_USERDEST = 'userDestination';
 
-
 const KEY_ORDERKEY = 'orderKey';
 const KEY_ORDERSTORE = 'store';
 const KEY_ORDERMENU = 'menu';
@@ -38,4 +37,5 @@ const KEY_STOREPHONE = 'storePhone';
 const KEY_STOREITEM = 'storeItem';
 const KEY_LAT = 'lat';
 const KEY_LON = 'lon';
+const KEY_PRIORITY = 'priority';
 const KEY_LASTUPDATE = 'lastUpdate';

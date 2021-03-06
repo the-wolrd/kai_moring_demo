@@ -8,10 +8,10 @@ import 'package:provider/provider.dart';
 
 class StoreSelectDialog extends StatefulWidget {
 
-  final Function selItem;
+  final Function selStoreAndPriority;
   final Function nextFunc;
 
-  StoreSelectDialog({this.selItem, this.nextFunc});
+  StoreSelectDialog({this.selStoreAndPriority, this.nextFunc});
 
   @override
   _StoreSelectDialogState createState() => _StoreSelectDialogState();
@@ -93,7 +93,7 @@ class _StoreSelectDialogState extends State<StoreSelectDialog> {
                               padding: const EdgeInsets.all(8.0),
                               child: InkWell(
                                 onTap: (){
-                                  widget.selItem(stores[index].storeName);
+                                  widget.selStoreAndPriority(stores[index].storeName, stores[index].priority, stores[index].storeKey);
                                   Navigator.pop(context);
                                   widget.nextFunc();
                                 },

@@ -8,6 +8,7 @@ class StoreModel {
   final List<dynamic> storeItem; // 분명 string이겠지만, firebase에서 받아올때는 dynamic이므로 요렇게 설정해야함.
   final double lat;
   final double lon;
+  final int priority;
   final DateTime lastUpdate;
 
   final DocumentReference reference;
@@ -19,6 +20,7 @@ class StoreModel {
         storeItem = map[KEY_STOREITEM],
         lat = map[KEY_LAT],
         lon = map[KEY_LON],
+        priority = map[KEY_PRIORITY],
         lastUpdate = map[KEY_LASTUPDATE] == null
             ? DateTime.now()
             : (map[KEY_LASTUPDATE] as Timestamp).toDate();
@@ -27,12 +29,15 @@ class StoreModel {
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
   static Map<String, dynamic> getMapForCreateStore(
-      {String storeKey,
+      {
+        String storeKey,
       String storeName,
         String storePhone,
       List<dynamic> storeItem,
       double lat,
-      double lon}) {
+      double lon,
+      int priority
+      }) {
     Map<String, dynamic> map = Map();
 
     map[KEY_STOREKEY] = storeKey;
@@ -41,6 +46,7 @@ class StoreModel {
     map[KEY_STOREITEM] = storeItem;
     map[KEY_LAT] = lat;
     map[KEY_LON] = lon;
+    map[KEY_PRIORITY] = priority;
     map[KEY_LASTUPDATE] = DateTime.now();
 
     return map;

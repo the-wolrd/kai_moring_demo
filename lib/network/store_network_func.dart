@@ -33,7 +33,9 @@ class StoreNetwork with Transformers {
           storeItem: [],
           // 처음엔 빈 아이템들
           lat: lat,
-          lon: lon));
+          lon: lon,
+          priority: 0
+      ));
     }
   }
 
@@ -67,32 +69,36 @@ class StoreNetwork with Transformers {
         .transform(toStores);
   }
 
-  Stream<List<StoreModel>> getStoresFromKeys(List<String> keys) {
-    final toStoresFromKeys =
-        StreamTransformer<QuerySnapshot, List<StoreModel>>.fromHandlers(
-            handleData: (snapshot, sink) async {
-      List<StoreModel> stores = [];
+  Stream<StoreModel> getStoreFromKey(dynamic storeKey) {
+    if (storeKey == null){
+      return null;
+    }
+    else{
+      return FirebaseFirestore.instance
+          .collection(COLLECTION_HOME)
+          .doc(DOCUMENT_ASSET)
+          .collection(COLLECTION_STORES)
+          .doc(storeKey)
+          .snapshots()
+          .transform(toStore);
+    }
+  }
 
-      keys.forEach((element) async {
-        DocumentSnapshot snapshot = await FirebaseFirestore.instance
-            .collection(COLLECTION_HOME)
-            .doc(DOCUMENT_ASSET)
-            .collection(COLLECTION_STORES)
-            .doc(element)
-            .get();
-        stores.add(StoreModel.fromSnapshot(snapshot));
-      });
+  Future<List<dynamic>> getStoresPriority() async {
+    return await FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ASSET).collection(COLLECTION_STORES).doc(KEY_PRIORITY).get().then((value) => value[KEY_PRIORITY]);
+  }
 
-      sink.add(stores);
-    });
+  Stream<List<StoreModel>> getStoresNoPriority() {
 
     return FirebaseFirestore.instance
         .collection(COLLECTION_HOME)
         .doc(DOCUMENT_ASSET)
         .collection(COLLECTION_STORES)
         .snapshots()
-        .transform(toStoresFromKeys);
+        .transform(toStoresNoPriority);
   }
+
+
 }
 
 StoreNetwork storeNetwork = StoreNetwork();

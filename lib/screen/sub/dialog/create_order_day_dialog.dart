@@ -20,6 +20,9 @@ class _DaySelectDialogState extends State<DaySelectDialog> {
 
   @override
   initState() {
+    _year = DateTime.now().year;
+    _month = DateTime.now().month;
+    _day = DateTime.now().day;
     _calendarController = CalendarController();
     super.initState();
   }
@@ -73,13 +76,9 @@ class _DaySelectDialogState extends State<DaySelectDialog> {
         view: CalendarView.month,
         controller: _calendarController,
         onTap: (now) {
-          print(now.date.year);
-          print(now.date.month);
-          print(now.date.day);
           _year = now.date.year;
           _month = now.date.month;
           _day = now.date.day;
-          print("dsada");
 
         },
       ),

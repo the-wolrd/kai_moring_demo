@@ -1,5 +1,6 @@
 import 'package:demo_kai_morning_210303/screen/sub/create_order.dart';
 import 'package:demo_kai_morning_210303/screen/sub/dialog/create_order_day_dialog.dart';
+import 'package:demo_kai_morning_210303/screen/sub/dialog/create_order_time_dialog.dart';
 import 'package:demo_kai_morning_210303/widgets/body_tab.dart';
 import 'package:demo_kai_morning_210303/widgets/my_progress_indicator.dart';
 import 'package:demo_kai_morning_210303/widgets/order_doing_list.dart';
@@ -23,14 +24,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-  DateTime selDay;
+  DateTime _selDay;
+  String _selTime;
 
   int selectedTap = 0;
 
   @override
   void initState() {
-
-    selDay = DateTime.now();
+    _selDay = DateTime.now();
+    _selTime = '종일';
 
     super.initState();
   }
@@ -107,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                                       builder: (context) {
                                         return DaySelectDialog(selDay: (DateTime dateTime) {
                                           setState(() {
-                                            selDay = dateTime;
+                                            _selDay = dateTime;
                                           });
                                         },
                                           nextFunc: (){},
@@ -117,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 10.0),
-                                    child: Text('${DateFormat('yyyy/MM/dd').format(selDay)}'),
+                                    child: Text('${DateFormat('yyyy/MM/dd').format(_selDay)}'),
                                   ),
                                 ),
                                 Expanded(
@@ -150,14 +152,148 @@ class _HomePageState extends State<HomePage> {
                           tab3: () {
                             selectedTap = 2;
                             setState(() {});
-                          }),
+                          },
+                      ),
+                      Container(
+                        color: Colors.white,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text("배달 시간"),
+                                        content: SizedBox(
+                                          height: 170.0,
+                                          child: Column(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  _selTime = '08:30 ~ 09:30';
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                    height: 50.0,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15.0)),
+                                                        border: Border.all(
+                                                            width: 1.0,
+                                                            color: Colors.grey[300]),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                              color: Colors.grey[500],
+                                                              blurRadius: 1.0)
+                                                        ]),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(
+                                                          vertical: 8.0, horizontal: 20.0),
+                                                      child: Center(
+                                                          child: Text('08:30 ~ 09:30',
+                                                              style: TextStyle(
+                                                                  color: Colors.black87))),
+                                                    )),
+                                              ),
+                                              SizedBox(height: 10.0),
+                                              InkWell(
+                                                onTap: () {
+                                                  _selTime = '11:00 ~ 12:00';
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                    height: 50.0,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15.0)),
+                                                        border: Border.all(
+                                                            width: 1.0,
+                                                            color: Colors.grey[300]),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                              color: Colors.grey[500],
+                                                              blurRadius: 1.0)
+                                                        ]),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(
+                                                          vertical: 8.0, horizontal: 20.0),
+                                                      child: Center(
+                                                        child: Text(
+                                                          '11:00 ~ 12:00',
+                                                          style:
+                                                          TextStyle(color: Colors.black87),
+                                                        ),
+                                                      ),
+                                                    )),
+                                              ),
+                                              SizedBox(height: 10.0),
+                                              InkWell(
+                                                onTap: () {
+                                                  _selTime = '종일';
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                    height: 50.0,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15.0)),
+                                                        border: Border.all(
+                                                            width: 1.0,
+                                                            color: Colors.grey[300]),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                              color: Colors.grey[500],
+                                                              blurRadius: 1.0)
+                                                        ]),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(
+                                                          vertical: 8.0, horizontal: 20.0),
+                                                      child: Center(
+                                                        child: Text(
+                                                          '종일',
+                                                          style:
+                                                          TextStyle(color: Colors.black87),
+                                                        ),
+                                                      ),
+                                                    )),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  setState(() {});
+                                },
+                                      child: Container(
+                                          width: 200.0,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              color: Colors.grey[100]
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Center(child: Text(_selTime)),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Expanded(
                         child: IndexedStack(
                           index: selectedTap,
                           children: [
-                            OrderReadyList(selDay: selDay),
-                            OrderDoingList(selDay: selDay),
-                            OrderDoneList(selDay: selDay)
+                            OrderReadyList(selDay: _selDay, selTime: _selTime),
+                            OrderDoingList(selDay: _selDay, selTime: _selTime),
+                            OrderDoneList(selDay: _selDay, selTime: _selTime)
                           ],
                         ),
                       )
