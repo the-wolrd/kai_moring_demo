@@ -30,9 +30,38 @@ class _SetStorePriorityState extends State<SetStorePriority> {
       child: Scaffold(
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text('가게 우선순위'),
+            SizedBox(
+              height: 50.0,
+              child: Stack(
+                children: [
+                  Center(child: Text('가게 우선순위', style: TextStyle(fontSize: 20.0),),),
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: ()async{
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (_) {
+                                return MyProgressIndicator();
+                              },
+                              isDismissible: false,
+                              enableDrag: false);
+
+                          await storeNetwork.updatePriority(keys: keys);
+
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text('업데이트하기', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                      Expanded(child: Container(),)
+                    ],
+                  )
+                ],
+              ),
             ),
             Expanded(
               child: ListView.builder(
@@ -66,11 +95,27 @@ class _SetStorePriorityState extends State<SetStorePriority> {
                                       children: [
                                         InkWell(
                                           child: Icon(Icons.arrow_drop_up, size: 30.0, color: (index == 0)? Colors.grey[300]: Colors.black,),
-
+                                          onTap: (){
+                                            if(index > 0){
+                                              String upper = keys[index-1];
+                                              String my = keys[index];
+                                              keys[index - 1] = my;
+                                              keys[index] = upper;
+                                              setState(() {});
+                                            }
+                                          },
                                         ),
                                         InkWell(
                                           child: Icon(Icons.arrow_drop_down, size: 30.0, color: (index == keys.length - 1)? Colors.grey[300]: Colors.black),
-
+                                          onTap: (){
+                                            if(index != keys.length - 1){
+                                              String my = keys[index];
+                                              String under = keys[index + 1];
+                                              keys[index] = under;
+                                              keys[index + 1] = my;
+                                              setState(() {});
+                                            }
+                                          },
                                         )
                                       ],
                                     )

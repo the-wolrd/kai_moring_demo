@@ -24,18 +24,31 @@ class StoreNetwork with Transformers {
         .doc(storeKey);
 
     DocumentSnapshot snapshot = await storeRef.get();
+    int priorityNum = await storeNetwork.getStoresPriority().then((value) => value.length);
+    final DocumentReference priorityRef = FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ASSET).collection(COLLECTION_STORES).doc(KEY_PRIORITY);
 
     if (!snapshot.exists) {
-      return await storeRef.set(StoreModel.getMapForCreateStore(
-          storeKey: storeKey,
-          storeName: storeName,
-          storePhone: storePhone,
-          storeItem: [],
-          // 처음엔 빈 아이템들
-          lat: lat,
-          lon: lon,
-          priority: 0
-      ));
+
+      return FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+
+        await tx.set(storeRef, StoreModel.getMapForCreateStore(
+            storeKey: storeKey,
+            storeName: storeName,
+            storePhone: storePhone,
+            storeItem: [],
+            // 처음엔 빈 아이템들
+            lat: lat,
+            lon: lon,
+            priority: priorityNum + 1
+        ));
+
+        await tx.update(priorityRef, {KEY_PRIORITY: FieldValue.arrayUnion([storeKey])});
+
+      });
+
+
+
+
     }
   }
 
@@ -58,6 +71,27 @@ class StoreNetwork with Transformers {
       KEY_STOREITEM: storeItem,
       KEY_LASTUPDATE: DateTime.now()
     });
+  }
+
+  Future<void> updatePriority({List<dynamic> keys}) async {
+
+    final CollectionReference storesRef = FirebaseFirestore.instance.collection(COLLECTION_HOME).doc(DOCUMENT_ASSET).collection(COLLECTION_STORES);
+    final DocumentReference priorityRef = storesRef.doc(KEY_PRIORITY);
+
+    return FirebaseFirestore.instance.runTransaction((Transaction tx) async {
+      int index = 0;
+
+      // priority 세팅
+      await tx.set(priorityRef, {KEY_PRIORITY:keys});
+
+      keys.forEach((element) async {
+        index += 1;
+        final storeRef = storesRef.doc(element);
+        await tx.update(storeRef, {KEY_PRIORITY: index});
+      });
+
+    });
+
   }
 
   Stream<List<StoreModel>> getStores() {

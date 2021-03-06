@@ -274,6 +274,7 @@ class _ShowStoreListState extends State<ShowStoreList> {
                         onPressed: () async {
                           await storeNetwork.createNewStore(storeKey: generateStoreKey(storeName:_nameController.text), storeName: _nameController.text, storePhone: _phoneController.text, lat: 36.3737298, lon: 127.3590254);
                           Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                       ),
                       FlatButton(
